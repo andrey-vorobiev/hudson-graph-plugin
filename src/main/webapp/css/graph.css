@@ -1,0 +1,41 @@
+.graphPlaceholder {
+    width: 100%;
+    min-width: 600px;
+    height: 350px;
+    background-image: url('/plugin/graph/images/loading.gif');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.graphPlaceholder .dygraph-label {
+    font-size: 12px
+}
+
+.graphTableContainer {
+    display: none;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.graphTableContainer table {
+    border: 1px solid;
+    border-collapse: collapse;
+}
+
+.graphTableContainer table thead tr {
+    text-align: center;
+}
+
+.graphTableContainer table thead tr th {
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 1px solid;
+}
+
+.graphTableContainer table tbody tr {
+    text-align: center;
+}
+
+.graphTableContainer table tbody tr td {
+    border: 1px solid;
+}
