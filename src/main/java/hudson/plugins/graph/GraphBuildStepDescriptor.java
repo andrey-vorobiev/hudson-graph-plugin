@@ -29,11 +29,11 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
 import java.io.IOException;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.*;
 
-import static hudson.plugins.graph.series.Series.createSeries;
+import static hudson.plugins.graph.GraphFactory.newGraphs;
+import net.sf.json.JSON;
 
 public class GraphBuildStepDescriptor extends BuildStepDescriptor<Publisher>
 {
@@ -58,26 +58,12 @@ public class GraphBuildStepDescriptor extends BuildStepDescriptor<Publisher>
     {
         GraphPublisher publisher = new GraphPublisher();
 
-        for (Object graphJson : makeJsonArray(publisherJson.get("graphs")))
+        for (Graph graph : newGraphs((JSON) publisherJson.get("graphs"), req))
         {
-            publisher.addGraph(createGraph((JSONObject) graphJson, req));
+            publisher.addGraph(graph);
         }
 
         return publisher;
-    }
-
-    private JSONArray makeJsonArray(Object json)
-    {
-        return json instanceof JSONArray ? (JSONArray) json : JSONArray.fromObject(json);
-    }
-
-    private Graph createGraph(JSONObject graphJson, StaplerRequest req)
-    {
-        Graph graph = req.bindJSON(Graph.class, graphJson);
-
-        graph.setSeries(createSeries(makeJsonArray(graphJson.get("series")), req));
-
-        return graph;
     }
 
     public FormValidation doCheckSeriesFile(@AncestorInPath AbstractProject project, @QueryParameter String value) throws IOException

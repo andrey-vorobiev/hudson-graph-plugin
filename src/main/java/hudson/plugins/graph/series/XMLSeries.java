@@ -60,7 +60,7 @@ public class XMLSeries extends Series
 
     public String getType()
     {
-        return Type.XML.toString();
+        return SeriesType.XML.toString();
     }
 
     public String getXpath()

@@ -60,7 +60,7 @@ public class CSVSeries extends Series
 
     public String getType()
     {
-        return Type.CSV.toString();
+        return SeriesType.CSV.toString();
     }
 
     public String getMode()

@@ -37,7 +37,7 @@ public class PropertiesSeries extends Series
 
     public String getType()
     {
-        return Type.PROPERTIES.toString();
+        return SeriesType.PROPERTIES.toString();
     }
 
     public String getLabel()
