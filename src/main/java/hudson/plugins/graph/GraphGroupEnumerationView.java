@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007 Yahoo! Inc.  All rights reserved.  
+ * Copyright (c) 2007 Yahoo! Inc.  All rights reserved.
  * Copyrights licensed under the MIT License.
  */
 package hudson.plugins.graph;
@@ -27,9 +27,9 @@ public class GraphGroupEnumerationView implements Action, StaplerProxy
 {
     private Project project;
 
-    private GraphPlugin publisher;
+    private GraphPublisher publisher;
 
-    public GraphGroupEnumerationView(Project project, GraphPlugin publisher)
+    public GraphGroupEnumerationView(Project project, GraphPublisher publisher)
     {
         this.project = project;
         this.publisher = publisher;
@@ -85,7 +85,7 @@ public class GraphGroupEnumerationView implements Action, StaplerProxy
         if (groups.size() == 1)
         {
             String singleGroup = groups.first();
-            
+
             return new GraphGroupView(project, singleGroup, publisher.getGraphs(singleGroup));
         }
         else

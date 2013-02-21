@@ -16,12 +16,9 @@ public class SeriesValue
     private Double value;
 
     @MapToColumn(column = 1)
-    private String url;
-
-    @MapToColumn(column = 2)
     private String label;
 
-    @MapToColumn(column = 3)
+    @MapToColumn(column = 2)
     private Integer buildNumber;
 
     public SeriesValue()
@@ -29,27 +26,21 @@ public class SeriesValue
         //serialization support
     }
 
-    public SeriesValue(Double value, String url, String label, Integer buildNumber)
+    public SeriesValue(Double value, String label, Integer buildNumber)
     {
-        this.url = url;
         this.value = value;
         this.label = label;
         this.buildNumber = buildNumber;
     }
-    
-    public SeriesValue(String value, String url, String label, AbstractBuild build)
+
+    public SeriesValue(String value, String label, AbstractBuild build)
     {
-        this(parseDouble(value), url, label, build.getNumber());
+        this(parseDouble(value), label, build.getNumber());
     }
 
     public Double getValue()
     {
         return value;
-    }
-
-    public String getUrl()
-    {
-        return url;
     }
 
     public String getLabel()
@@ -65,6 +56,6 @@ public class SeriesValue
     @Override
     public String toString()
     {
-        return "SeriesValue{label=" + label + ", value=" + value + ", url=" + url + ", buildNumber=" + buildNumber + "}";
+        return "SeriesValue{label=" + label + ", value=" + value + ", buildNumber=" + buildNumber + "}";
     }
 }

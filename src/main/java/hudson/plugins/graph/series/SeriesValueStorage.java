@@ -21,7 +21,7 @@ public class SeriesValueStorage
     {
         public String[] convertEntry(SeriesValue value)
         {
-            return new String[]{value.getValue().toString(), value.getUrl(), value.getLabel(), value.getBuildNumber().toString()};
+            return new String[]{value.getValue().toString(), value.getLabel(), value.getBuildNumber().toString()};
         }
     }
 
@@ -60,23 +60,23 @@ public class SeriesValueStorage
 
         return reader.readAll();
     }
-    
+
     protected int findMaxBuildNumber(List<SeriesValue> values)
     {
         return values.isEmpty() ? -1 : values.get(values.size() - 1).getBuildNumber();
     }
-    
+
     protected boolean shouldIncludeAll(Integer maxNumberOfBuilds)
     {
         return maxNumberOfBuilds == null || maxNumberOfBuilds == -1;
     }
-    
+
     public List<SeriesValue> read(Integer maxNumberOfBuilds) throws IOException
     {
         List<SeriesValue> values = read(), matchedValues = new ArrayList<SeriesValue>();
-        
+
         int maxBuildNumber = findMaxBuildNumber(values);
-        
+
         for (SeriesValue value : values)
         {
             if (shouldIncludeAll(maxNumberOfBuilds) || value.getBuildNumber() > maxBuildNumber - maxNumberOfBuilds)
@@ -84,7 +84,7 @@ public class SeriesValueStorage
                 matchedValues.add(value);
             }
         }
-        
+
         return matchedValues;
     }
 

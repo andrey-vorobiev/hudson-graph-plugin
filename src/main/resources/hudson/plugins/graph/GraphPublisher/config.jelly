@@ -11,7 +11,7 @@
                 <f:repeatableDeleteButton value="${%Delete Graph}"/>
             </div>
             <table width="100%">
-                <input name="storageFilename" type="hidden" value="${graph.storageFilename}"/>
+                <input name="id" type="hidden" value="${graph.id}"/>
                 <f:entry title="${%Graph group}" help="/plugin/graph/help/group.html">
                     <f:textbox name="group" value="${graph.group}" clazz="required"/>
                 </f:entry>
@@ -24,22 +24,23 @@
                 <f:entry title="${%Graph y-axis label}" help="/plugin/graph/help/yaxis.html">
                     <f:textbox name="yLabel" value="${graph.yLabel}"/>
                 </f:entry>
+                <f:entry title="${%Use logarithmic scale}" help="/plugin/graph/help/logscale.html">
+                    <input type="checkbox" name="logScaling" checked="${graph.logScaling}"/>
+                </f:entry>
+
                 <f:entry title="${%Graph style}" help="/plugin/graph/help/style.html">
                     <select name="style">
                         <f:option value="area" selected="${graph.style=='area'}">${%Area}</f:option>
                         <f:option value="bar" selected="${graph.style=='bar'}">${%Bar}</f:option>
-                        <f:option value="stackedbar" selected="${graph.style=='stackedbar'}">${%Stacked bar}</f:option>
                         <f:option value="line" selected="${graph.style=='line' or graph==null}">${%Line}</f:option>
                     </select>
                 </f:entry>
+
                 <f:entry title="" description="${%A new data series definition}">
                     <f:repeatable var="series" items="${graph.series}" minimum="1">
                         <table width="100%" bgcolor="#EEEEEE">
                             <f:entry title="${%Data series file}" help="/plugin/graph/help/series.html">
-                                <f:textbox name="file" value="${series.file}" checkUrl="'descriptorByName/hudson.plugins.graph.GraphPlugin/checkSeriesFile?value='+toValue(this)"/>
-                            </f:entry>
-                            <f:entry title="${%URL}" help="/plugin/graph/help/url.html">
-                                <f:textbox name="url" value="${series.url}" />
+                                <f:textbox name="file" value="${series.file}" checkUrl="'descriptorByName/hudson.plugins.graph.GraphPublisher/checkSeriesFile?value='+toValue(this)"/>
                             </f:entry>
 
                             <f:radioBlock name="seriesType" value="properties" title="${%Load data from properties file}" help="/plugin/graph/help/properties.html" checked="${series.type=='properties' or series==null}">

@@ -39,9 +39,9 @@ public class GraphBuildStepDescriptor extends BuildStepDescriptor<Publisher>
 {
     public GraphBuildStepDescriptor()
     {
-        super(GraphPlugin.class);
+        super(GraphPublisher.class);
     }
-    
+
     public String getDisplayName()
     {
         return Messages.Plot_Publisher_DisplayName();
@@ -56,14 +56,14 @@ public class GraphBuildStepDescriptor extends BuildStepDescriptor<Publisher>
     @Override
     public Publisher newInstance(StaplerRequest req, JSONObject publisherJson) throws Descriptor.FormException
     {
-        GraphPlugin plugin = new GraphPlugin();
+        GraphPublisher publisher = new GraphPublisher();
 
         for (Object graphJson : makeJsonArray(publisherJson.get("graphs")))
         {
-            plugin.addGraph(createGraph((JSONObject) graphJson, req));
+            publisher.addGraph(createGraph((JSONObject) graphJson, req));
         }
 
-        return plugin;
+        return publisher;
     }
 
     private JSONArray makeJsonArray(Object json)
@@ -80,7 +80,6 @@ public class GraphBuildStepDescriptor extends BuildStepDescriptor<Publisher>
         return graph;
     }
 
-    //This methods used to check file path existence from client side
     public FormValidation doCheckSeriesFile(@AncestorInPath AbstractProject project, @QueryParameter String value) throws IOException
     {
         return FilePath.validateFileMask(project.getSomeWorkspace(), value);

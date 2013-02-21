@@ -33,30 +33,28 @@ import static org.junit.Assert.*;
 public class PropertiesSeriesTest extends SeriesTest
 {
     protected String sampleFile = "sample.properties";
-    
+
     protected String samleLabel = "label";
 
-    protected String sampleUrl = "http://sample.com";
-    
     @Test
     public void shouldNotLoadAnySeriesIfFileNotExists() throws IOException
     {
-        Series series = new PropertiesSeries("noop", samleLabel, null);
-        
+        Series series = new PropertiesSeries("noop", samleLabel);
+
         assertEquals("Unexpected number of points", 0, series.loadSeries(mockBuild()).size());
     }
-    
+
     @Test
     public void shouldLoadSeriesFromPropertiesFile() throws IOException
     {
-        Series series = new PropertiesSeries(sampleFile, samleLabel, sampleUrl);
-        
+        Series series = new PropertiesSeries(sampleFile, samleLabel);
+
         List<SeriesValue> points = series.loadSeries(mockBuild());
-        
+
         assertEquals("Unexpected number of values", 1, points.size());
-        
+
         SeriesValue point = points.iterator().next();
-        
+
         assertEquals("Unexpected point value", 1.0, point.getValue(), 0);
         assertEquals("Unexpected point label", samleLabel, point.getLabel());
     }
@@ -64,10 +62,10 @@ public class PropertiesSeriesTest extends SeriesTest
     @Test
     public void labelShouldBeNullIfNotSpecifiedInSeriesConfiguration() throws IOException
     {
-        Series series = new PropertiesSeries(sampleFile, null, sampleUrl);
-        
+        Series series = new PropertiesSeries(sampleFile, null);
+
         SeriesValue point = series.loadSeries(mockBuild()).iterator().next();
-        
+
         assertNull("Unexpected point label", point.getLabel());
     }
 }

@@ -16,7 +16,7 @@ import java.util.*;
  *
  * @author Nigel Daley
  */
-public class GraphPlugin extends Recorder
+public class GraphPublisher extends Recorder
 {
     @Extension
     public static final GraphBuildStepDescriptor descriptor = new GraphBuildStepDescriptor();
@@ -27,11 +27,11 @@ public class GraphPlugin extends Recorder
     {
         return graphs;
     }
-    
+
     public SortedSet<Graph> getGraphs(String urlGroup)
     {
         SortedSet<Graph> matchedPlots = new TreeSet<Graph>();
-        
+
         for (Graph graph : graphs)
         {
             if (urlGroup.equals(graph.getGroup()))
@@ -39,27 +39,27 @@ public class GraphPlugin extends Recorder
                 matchedPlots.add(graph);
             }
         }
-        
+
         return matchedPlots;
     }
-    
-    public void addGraph(Graph graph)
-    {
-        graphs.add(graph);
-    }
-    
+
     public SortedSet<String> getGroups()
     {
         SortedSet<String> groups = new TreeSet<String>();
-        
+
         for (Graph graph : graphs)
         {
             groups.add(graph.getGroup());
         }
-        
+
         return groups;
     }
-    
+
+    public void addGraph(Graph graph)
+    {
+        graphs.add(graph);
+    }
+
     @Override
     public Action getProjectAction(AbstractProject<?, ?> project)
     {
@@ -75,7 +75,7 @@ public class GraphPlugin extends Recorder
     public BuildStepDescriptor<Publisher> getDescriptor()
     {
         return descriptor;
-    }       
+    }
 
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException

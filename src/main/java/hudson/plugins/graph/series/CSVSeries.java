@@ -35,25 +35,24 @@ public class CSVSeries extends Series
         INCLUDE_BY_INDEX,
         EXCLUDE_BY_INDEX
     }
-    
+
     private FilteringMode mode = FilteringMode.OFF;
 
     private String columns;
 
     /**
-     * 
+     *
      * @param file csv file to take data from
-     * @param url URL to use as a base for mapping points.
-     * @param mode flag that describes how specified columns should be 
-     * considered, i.e is it column indexes or named or should be columns included 
+     * @param mode flag that describes how specified columns should be
+     * considered, i.e is it column indexes or named or should be columns included
      * or excluded.
-     * @param columns comma separated list of columns or indexes to exclude or 
+     * @param columns comma separated list of columns or indexes to exclude or
      * include.
      */
     @DataBoundConstructor
-    public CSVSeries(String file, String url, String mode, String columns)
+    public CSVSeries(String file, String mode, String columns)
     {
-        super(url, file);
+        super(file);
 
         this.columns = columns;
         this.mode = FilteringMode.valueOf(mode);
@@ -68,7 +67,7 @@ public class CSVSeries extends Series
     {
         return mode.name();
     }
-    
+
     protected boolean shouldIncludeColumn(String header, String columnIndex)
     {
         switch (mode)
@@ -90,7 +89,7 @@ public class CSVSeries extends Series
     public List<SeriesValue> loadSeries(AbstractBuild build) throws IOException
     {
         List<SeriesValue> values = new ArrayList<SeriesValue>();
-        
+
         FilePath seriesFile = new FilePath(build.getWorkspace(), getFile());
 
         try
@@ -99,31 +98,33 @@ public class CSVSeries extends Series
             {
                 return values;
             }
-            
+
             CSVReader<String[]> reader = null;
-            
+
             try
             {
                 reader = new CSVReaderBuilder<String[]>(new InputStreamReader(seriesFile.read())).strategy(CSVStrategy.UK_DEFAULT).entryParser(new DefaultCSVEntryParser()).build();
-                
+
                 List<String> headers = reader.readHeader();
-                
+
                 for (String[] row; (row = reader.readNext()) != null;)
                 {
                     if (row.length == 0 || row[0].isEmpty())
                     {
                         continue;
                     }
-                    
+
                     for (Integer columnIndex = 0; columnIndex < row.length; columnIndex++)
                     {
                         String header = headers.get(columnIndex);
-                        
+
                         if (shouldIncludeColumn(header, columnIndex.toString()))
                         {
-                            values.add(new SeriesValue(row[columnIndex], getUrl(header, columnIndex), header, build));
+                            values.add(new SeriesValue(row[columnIndex], header, build));
                         }
                     }
+
+                    break;
                 }
             }
             finally
@@ -133,7 +134,7 @@ public class CSVSeries extends Series
                     reader.close();
                 }
             }
-            
+
             return values;
         }
         catch (InterruptedException e)
@@ -146,11 +147,10 @@ public class CSVSeries extends Series
     public String toString()
     {
         StringBuilder sb = new StringBuilder("CSVSeries{");
-        
+
         sb.append("file=").append(file).append(", ");
         sb.append("mode=").append(mode).append(", ");
-        sb.append("columns=").append(columns).append(", ");
-        sb.append("url=").append(url);
+        sb.append("columns=").append(columns);
 
         return sb.append("}").toString();
     }

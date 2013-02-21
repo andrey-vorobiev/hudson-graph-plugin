@@ -1,28 +1,31 @@
-<!--
- Copyright (c) 2008-2009 Yahoo! Inc.  All rights reserved.
- The copyrights to the contents of this file are licensed under the MIT License (http://www.opensource.org/licenses/mit-license.php)
--->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout">
     <link href="/plugin/graph/css/graph.css" rel="stylesheet" type="text/css"/>
-    
+    <script type="text/javascript" src="/plugin/graph/js/graph.js"/>
+    <script type="text/javascript" src="/plugin/graph/js/flotr2.min.js"/>
     <script type="text/javascript">
         <![CDATA[
-        ]] >
+            window.onload = function()
+            {
+                jQuery.ajax("getGroup").done(function(group)
+                {
+                    for (var graphIndex = 0; graphIndex < group.graphs.length; graphIndex++)
+                    {
+                        var graph = new hgp.Graph(group.graphs[graphIndex]);
+
+                        graph.embedGraph(document.getElementById('placeholder-' + graphIndex));
+                    }
+                });
+            };
+        ]]>
     </script>
-    
+
     <l:layout title="${it.group}">
         <st:include it="${it.project}" page="sidepanel.jelly"/>
         <l:main-panel>
             <h1><img src="/images/32x32/graph.gif"/>${it.group}</h1>
+
             <j:forEach var="graph" items="${it.graphs}" varStatus="graphIndex">
-                <div id="graph-container-${graphIndex.index}">
-                    <h2>${graph.name}</h2>
-                    
-                    <div id="graph-placeholder-${graphIndex.index}" class="graphPlaceholder"></div>
-                    
-                    <a id="show-hide-values-${graphIndex.index}" href="javascript:">Show/hide original values</a>
-                    <div id="graph-table-container-${graphIndex.index}" class="graphTableContainer"></div>
-                </div>
+                <div id="placeholder-${graphIndex.index}" class="graphPlaceholder"></div>
             </j:forEach>
         </l:main-panel>
     </l:layout>

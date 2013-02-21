@@ -26,14 +26,14 @@ public abstract class Series
     public enum Type
     {
         CSV("csv"), PROPERTIES("properties"), XML("xml");
-        
+
         private String value;
 
         private Type(String value)
         {
             this.value = value;
         }
-        
+
         public static Type parse(String value)
         {
             for (Type seriesType : values())
@@ -53,23 +53,20 @@ public abstract class Series
         }
     }
 
-    protected String url;
-
     protected String file;
-    
+
     /**
-     * 
-     * @param file 
+     *
+     * @param file
      */
-    protected Series(String url, String file)
+    protected Series(String file)
     {
-        this.url = url;
         this.file = file;
     }
-    
+
     /**
      * Creates series from JSON data using StaplerRequest
-     * 
+     *
      * @param json series in JSON representation
      * @param req stapler request
      * @return series
@@ -77,11 +74,11 @@ public abstract class Series
     public static Series createSeries(JSONObject json, StaplerRequest req)
     {
         JSONObject seriesJson = json.getJSONObject("seriesType");
-        
+
         seriesJson.put("file", json.getString("file"));
-        
+
         String seriesType = seriesJson.getString("value");
-        
+
         switch (Type.parse(seriesType))
         {
             case CSV:
@@ -94,10 +91,10 @@ public abstract class Series
                 throw new IllegalArgumentException("Unexpected series type:" + seriesType);
         }
     }
-    
+
     /**
      * Creates list of series from JSON data using StaplerRequest
-     * 
+     *
      * @param array JSON array of series
      * @param req stapler request
      * @return series list
@@ -105,30 +102,20 @@ public abstract class Series
     public static List<Series> createSeries(JSONArray array, StaplerRequest req)
     {
         List<Series> series = new ArrayList<Series>();
-        
+
         for (Object seriesJson : array)
         {
             series.add(createSeries((JSONObject) seriesJson, req));
         }
-        
+
         return series;
-    }
-
-    public String getUrl()
-    {
-        return url;
-    }
-
-    protected String getUrl(String label, Integer index)
-    {
-        return url == null ? "" : url.replace("%name%", nvl(label, "")).replace("%index%", index.toString());
     }
 
     public String getFile()
     {
         return file;
     }
-    
+
     protected String nvl(String... values)
     {
         for (String value : values)
@@ -138,7 +125,7 @@ public abstract class Series
                 return value;
             }
         }
-        
+
         return null;
     }
 

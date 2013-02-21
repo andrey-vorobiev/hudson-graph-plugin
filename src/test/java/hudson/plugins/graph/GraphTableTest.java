@@ -14,18 +14,18 @@ public class GraphTableTest
     public void tableShouldBeCorrectlyGenerated()
     {
         List<SeriesValue> seriesValues = new ArrayList<SeriesValue>();
-        
-        seriesValues.add(new SeriesValue(0.0, null, "a", 1));
-        seriesValues.add(new SeriesValue(1.0, null, "b", 1));
-        
-        seriesValues.add(new SeriesValue(1.0, null, "a", 2));
-        seriesValues.add(new SeriesValue(2.0, null, "b", 2));
-        seriesValues.add(new SeriesValue(3.0, null, "c", 2));
-        
+
+        seriesValues.add(new SeriesValue(0.0, "a", 1));
+        seriesValues.add(new SeriesValue(1.0, "b", 1));
+
+        seriesValues.add(new SeriesValue(1.0, "a", 2));
+        seriesValues.add(new SeriesValue(2.0, "b", 2));
+        seriesValues.add(new SeriesValue(3.0, "c", 2));
+
         GraphTable graphTable = new GraphTable(seriesValues);
-        
+
         assertEquals("Unexpected headers", Arrays.asList("a", "b", "c"), graphTable.getHeaders());
-        
+
         assertEquals("Unexpected number of rows", 2, graphTable.getRows().size());
     }
 }

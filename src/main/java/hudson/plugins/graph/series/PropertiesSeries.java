@@ -21,18 +21,17 @@ import static org.apache.commons.lang.StringUtils.isEmpty;
 public class PropertiesSeries extends Series
 {
     private String label;
-    
+
     /**
      *
-     * @param url
      * @param file properties file to take data from
-     * @param label 
+     * @param label
      */
     @DataBoundConstructor
-    public PropertiesSeries(String file, String label, String url)
+    public PropertiesSeries(String file, String label)
     {
-        super(url, file);
-        
+        super(file);
+
         this.label = label;
     }
 
@@ -59,24 +58,24 @@ public class PropertiesSeries extends Series
             {
                 return values;
             }
-            
+
             InputStream inputStream = null;
-            
+
             try
             {
                 inputStream = seriesFile.read();
-                
+
                 Properties properties = new Properties();
-                
+
                 properties.load(inputStream);
-                
+
                 String value = properties.getProperty("YVALUE");
-                
+
                 String valueLabel = nvl(properties.getProperty("LABEL"), label);
-                
+
                 if (!isEmpty(value))
                 {
-                    values.add(new SeriesValue(value, getUrl(valueLabel, 0), valueLabel, build));
+                    values.add(new SeriesValue(value, valueLabel, build));
                 }
             }
             finally
@@ -86,7 +85,7 @@ public class PropertiesSeries extends Series
                     inputStream.close();
                 }
             }
-            
+
             return values;
         }
         catch (InterruptedException e)

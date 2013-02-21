@@ -34,53 +34,53 @@ import static hudson.plugins.graph.series.CSVSeries.FilteringMode.*;
 public class CSVSeriesTest extends SeriesTest
 {
     protected String sampleFile = "sample.csv";
-    
+
     @Test
     public void shouldNotLoadAnySeriesIfFileNotExists() throws IOException
     {
-        Series series = new CSVSeries("noop", null, OFF.name(), null);
-        
+        Series series = new CSVSeries("noop", OFF.name(), null);
+
         assertEquals("Unexpected number of points", 0, series.loadSeries(mockBuild()).size());
     }
-    
+
     @Test
     public void shouldLoadSeriesFromCsvFile() throws IOException
     {
-        Series series = new CSVSeries(sampleFile, null, OFF.name(), null);
-        
+        Series series = new CSVSeries(sampleFile, OFF.name(), null);
+
         List<SeriesValue> points = series.loadSeries(mockBuild());
-        
+
         assertEquals("Unexpected number of points", 5, points.size());
     }
-    
+
     @Test
     public void shouldExcludeColumnsByName() throws IOException
     {
         String columnNamesToExclude = "a,c";
-        
-        Series series = new CSVSeries(sampleFile, null, EXCLUDE_BY_COLUMN.name(), columnNamesToExclude);
-        
+
+        Series series = new CSVSeries(sampleFile, EXCLUDE_BY_COLUMN.name(), columnNamesToExclude);
+
         List<SeriesValue> points = series.loadSeries(mockBuild());
 
         assertEquals("Unexpected number of points", 3, points.size());
-        
+
         for (SeriesValue point : points)
         {
             assertTrue("Point should excluded: " + point, !columnNamesToExclude.contains(point.getLabel()));
         }
     }
-    
+
     @Test
     public void shouldExcludeColumnsByIndexes() throws IOException
     {
         String columnIndexesToExclude = "1,0,3";
-        
-        Series series = new CSVSeries(sampleFile, null, EXCLUDE_BY_INDEX.name(), columnIndexesToExclude);
-        
+
+        Series series = new CSVSeries(sampleFile, EXCLUDE_BY_INDEX.name(), columnIndexesToExclude);
+
         List<SeriesValue> points = series.loadSeries(mockBuild());
 
         assertEquals("Unexpected number of points", 2, points.size());
-        
+
         for (SeriesValue point : points)
         {
             Integer value = point.getValue().intValue();
@@ -88,35 +88,35 @@ public class CSVSeriesTest extends SeriesTest
             assertTrue("Point should excluded: " + point, !columnIndexesToExclude.contains(value.toString()));
         }
     }
-    
+
     @Test
     public void shouldIncludeColumnsByName() throws IOException
     {
         String columnNamesToInclude = "a,c";
-        
-        Series series = new CSVSeries(sampleFile, null, INCLUDE_BY_COLUMN.name(), columnNamesToInclude);
-        
+
+        Series series = new CSVSeries(sampleFile, INCLUDE_BY_COLUMN.name(), columnNamesToInclude);
+
         List<SeriesValue> points = series.loadSeries(mockBuild());
 
         assertEquals("Unexpected number of points", 2, points.size());
-        
+
         for (SeriesValue point : points)
         {
             assertTrue("Point should be included: " + point, columnNamesToInclude.contains(point.getLabel()));
         }
     }
-    
+
     @Test
     public void shouldIncludeColumnsByIndexes() throws IOException
     {
         String columnIndexesToInclude = "1,0,3";
-        
-        Series series = new CSVSeries(sampleFile, null, INCLUDE_BY_INDEX.name(), columnIndexesToInclude);
-        
+
+        Series series = new CSVSeries(sampleFile, INCLUDE_BY_INDEX.name(), columnIndexesToInclude);
+
         List<SeriesValue> points = series.loadSeries(mockBuild());
 
         assertEquals("Unexpected number of points", 3, points.size());
-        
+
         for (SeriesValue point : points)
         {
             Integer value = point.getValue().intValue();

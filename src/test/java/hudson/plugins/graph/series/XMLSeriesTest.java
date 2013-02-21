@@ -33,30 +33,30 @@ import static org.junit.Assert.*;
 public class XMLSeriesTest extends SeriesTest
 {
     protected String sampleFile = "sample.xml";
-    
+
     protected String samleLabel = "label";
-    
+
     @Test
     public void shouldNotLoadAnySeriesIfFileNotExists() throws IOException
     {
-        Series series = new XMLSeries("noop", null, null, null, null);
-        
+        Series series = new XMLSeries("noop", null, null, null);
+
         assertEquals("Unexpected number of points", 0, series.loadSeries(mockBuild()).size());
     }
-    
+
     @Test
     public void shouldLoadSeriesFromXmlFile() throws IOException
     {
         String xpath = "/level1/level2/elem/text()";
-        
-        Series series = new XMLSeries(sampleFile, xpath, "STRING", null, samleLabel);
-        
+
+        Series series = new XMLSeries(sampleFile, xpath, "STRING", samleLabel);
+
         List<SeriesValue> points = series.loadSeries(mockBuild());
-        
+
         assertEquals("Unexpected number of points", 1, points.size());
-        
+
         SeriesValue point = points.iterator().next();
-        
+
         assertEquals("Unexpected point value", 0.0, point.getValue(), 0);
         assertEquals("Unexpected point label", samleLabel, point.getLabel());
     }
