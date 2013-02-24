@@ -63,7 +63,7 @@ public class GraphPublisher extends Recorder
     @Override
     public Action getProjectAction(AbstractProject<?, ?> project)
     {
-        return project instanceof Project ? new GraphGroupEnumerationView((Project) project, this) : null;
+        return new GraphGroupEnumerationView(project, this);
     }
 
     public BuildStepMonitor getRequiredMonitorService()
@@ -84,7 +84,7 @@ public class GraphPublisher extends Recorder
 
         for (Graph graph : getGraphs())
         {
-            graph.addBuild(build, listener);
+            graph.handleBuild(build, listener);
         }
 
         return true;

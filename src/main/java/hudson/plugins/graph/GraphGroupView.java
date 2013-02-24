@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2007 Yahoo! Inc.  All rights reserved.  
+ * Copyright (c) 2007 Yahoo! Inc.  All rights reserved.
  * Copyrights licensed under the MIT License.
  */
 package hudson.plugins.graph;
 
-import hudson.model.Project;
+import hudson.model.AbstractProject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,13 +26,13 @@ import net.sf.json.JSONObject;
 @SuppressWarnings("unused")
 public class GraphGroupView
 {
-    private Project project;
+    private AbstractProject project;
 
     private List<Graph> graphs;
 
     private String group;
 
-    public GraphGroupView(Project project, String group, SortedSet<Graph> graphs)
+    public GraphGroupView(AbstractProject project, String group, SortedSet<Graph> graphs)
     {
         this.graphs = new ArrayList<Graph>(graphs);
         this.group = group;
@@ -49,33 +49,33 @@ public class GraphGroupView
         return graphs;
     }
 
-    public Project getProject()
+    public AbstractProject getProject()
     {
         return project;
     }
-    
+
     private JSONArray getGraphsJson() throws IOException
     {
         JSONArray graphsJson = new JSONArray();
-        
+
         for (Graph graph : graphs)
         {
             graphsJson.add(graph.toJson(project));
         }
-        
+
         return graphsJson;
     }
-    
+
     public void doGetGroup(StaplerRequest req, StaplerResponse res) throws IOException
     {
         JSONObject groupJson = new JSONObject();
-        
+
         groupJson.put("name", group);
-        
+
         groupJson.put("graphs", getGraphsJson());
-        
+
         res.setContentType("application/json");
-        
+
         res.getWriter().write(groupJson.toString());
     }
 }

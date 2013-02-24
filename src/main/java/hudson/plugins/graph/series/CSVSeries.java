@@ -50,9 +50,9 @@ public class CSVSeries extends Series
      * include.
      */
     @DataBoundConstructor
-    public CSVSeries(String file, String mode, String columns)
+    public CSVSeries(String id, String file, String style, String mode, String columns)
     {
-        super(file);
+        super(id, file, style);
 
         this.columns = columns;
         this.mode = FilteringMode.valueOf(mode);
@@ -86,7 +86,7 @@ public class CSVSeries extends Series
     }
 
     @Override
-    public List<SeriesValue> loadSeries(AbstractBuild build) throws IOException
+    protected List<SeriesValue> loadSeries(AbstractBuild build) throws IOException
     {
         List<SeriesValue> values = new ArrayList<SeriesValue>();
 

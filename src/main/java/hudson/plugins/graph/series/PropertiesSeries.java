@@ -28,9 +28,9 @@ public class PropertiesSeries extends Series
      * @param label
      */
     @DataBoundConstructor
-    public PropertiesSeries(String file, String label)
+    public PropertiesSeries(String id, String file, String style, String label)
     {
-        super(file);
+        super(id, file, style);
 
         this.label = label;
     }
@@ -46,7 +46,7 @@ public class PropertiesSeries extends Series
     }
 
     @Override
-    public List<SeriesValue> loadSeries(AbstractBuild build) throws IOException
+    protected List<SeriesValue> loadSeries(AbstractBuild build) throws IOException
     {
         List<SeriesValue> values = new ArrayList<SeriesValue>();
 

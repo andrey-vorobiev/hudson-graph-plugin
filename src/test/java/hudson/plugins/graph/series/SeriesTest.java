@@ -36,6 +36,8 @@ import static org.mockito.Mockito.*;
 public class SeriesTest
 {
     protected FilePath sampleWorkspace = new FilePath(new File("target/test-classes"));
+    protected String sampleId = "id";
+    protected String sampleStyle = "line";
     
     public AbstractBuild mockBuild() throws IOException
     {

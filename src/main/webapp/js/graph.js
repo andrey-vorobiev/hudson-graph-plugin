@@ -41,6 +41,11 @@ hgp.Graph = function(json)
     this.numberOfValues = json.series[0] ? json.series[0].values.length : 0;
 };
 
+hgp.Graph.numberFormatter = function(value)
+{
+    return parseFloat(value).toFixed(2);
+};
+
 hgp.Graph.prototype.getSeriesValues = function(series)
 {
     var values = [];
@@ -55,7 +60,7 @@ hgp.Graph.prototype.getSeriesValues = function(series)
 
 hgp.Graph.prototype.getSeriesType = function(series)
 {
-    switch (this.json.style)
+    switch (series.style)
     {
         case 'area':
             return {
@@ -63,11 +68,12 @@ hgp.Graph.prototype.getSeriesType = function(series)
             };
         case 'bar':
             return {
-                bars: {show: true, grouped: true, fillOpacity: 1}
+                bars: {show: true, grouped: true, fillOpacity: 0.5}
             };
         default:
             return {
-                lines: {show: true}
+                lines: {show: true},
+                points: {show: true, radius: 2}
             };
     }
 };
@@ -114,7 +120,8 @@ hgp.Graph.prototype.getOptions = function()
         },
         yaxis: {
             title: this.json.yLabel,
-            scaling: this.json.logscaling ? 'logarithmic' : 'linear'
+            scaling: this.json.logscaling ? 'logarithmic' : 'linear',
+            tickFormatter: hgp.Graph.numberFormatter
         },
         xaxis: {
             title: 'Build numbers',
@@ -132,7 +139,7 @@ hgp.Graph.prototype.drawGraph = function(container, options)
     var mergedOptions = Flotr._.extend(this.getOptions(), options || {});
 
     Flotr.draw(container, this.getSeries(), mergedOptions);
-}
+};
 
 hgp.Graph.prototype.embedGraph = function(container)
 {

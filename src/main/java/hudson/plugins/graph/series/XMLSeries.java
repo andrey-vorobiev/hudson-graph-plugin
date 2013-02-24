@@ -49,9 +49,9 @@ public class XMLSeries extends Series
      * @param label
      */
     @DataBoundConstructor
-    public XMLSeries(String file, String xpath, String nodeType, String label)
+    public XMLSeries(String id, String file, String style, String xpath, String nodeType, String label)
     {
-        super(file);
+        super(id, file, style);
 
         this.xpath = xpath;
         this.label = label;
@@ -99,7 +99,7 @@ public class XMLSeries extends Series
     }
 
     @Override
-    public List<SeriesValue> loadSeries(AbstractBuild build) throws IOException
+    protected List<SeriesValue> loadSeries(AbstractBuild build) throws IOException
     {
         List<SeriesValue> values = new ArrayList<SeriesValue>();
 

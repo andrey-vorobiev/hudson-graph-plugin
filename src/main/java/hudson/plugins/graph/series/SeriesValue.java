@@ -5,8 +5,8 @@
 package hudson.plugins.graph.series;
 
 import com.googlecode.jcsv.annotations.MapToColumn;
+
 import hudson.model.AbstractBuild;
-import hudson.model.Build;
 
 import static java.lang.Double.parseDouble;
 

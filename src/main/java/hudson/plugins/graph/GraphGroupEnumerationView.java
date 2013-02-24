@@ -4,6 +4,7 @@
  */
 package hudson.plugins.graph;
 
+import hudson.model.AbstractProject;
 import hudson.model.Action;
 import hudson.model.Project;
 
@@ -25,17 +26,17 @@ import static java.net.URLEncoder.encode;
 @SuppressWarnings("unused")
 public class GraphGroupEnumerationView implements Action, StaplerProxy
 {
-    private Project project;
+    private AbstractProject project;
 
     private GraphPublisher publisher;
 
-    public GraphGroupEnumerationView(Project project, GraphPublisher publisher)
+    public GraphGroupEnumerationView(AbstractProject project, GraphPublisher publisher)
     {
         this.project = project;
         this.publisher = publisher;
     }
 
-    public Project getProject()
+    public AbstractProject getProject()
     {
         return project;
     }

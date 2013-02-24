@@ -4,10 +4,18 @@
  */
 package hudson.plugins.graph.series;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
+import net.sf.json.*;
+
+import hudson.FilePath;
 import hudson.model.AbstractBuild;
+import hudson.model.AbstractProject;
+import hudson.plugins.graph.GraphTable;
+
+import static java.util.UUID.randomUUID;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
  * Represents a plot data series configuration.
@@ -17,16 +25,32 @@ import hudson.model.AbstractBuild;
  */
 public abstract class Series
 {
+    protected String id;
+
     protected String file;
 
-    protected Series(String file)
+    protected String style;
+
+    protected Series(String id, String file, String style)
     {
+	this.id = isEmpty(id) ? randomUUID().toString() : id;
         this.file = file;
+        this.style = style;
+    }
+
+    public String getId()
+    {
+	return id;
     }
 
     public String getFile()
     {
         return file;
+    }
+
+    public String getStyle()
+    {
+	return style;
     }
 
     protected String nvl(String... values)
@@ -44,6 +68,67 @@ public abstract class Series
 
     public abstract String getType();
 
+    protected String getStorageName()
+    {
+	return id + ".csv";
+    }
+
+    protected SeriesValueStorage getStorage(AbstractProject project)
+    {
+	File storageFile = new File(project.getConfigFile().getFile().getParentFile(), getStorageName());
+
+	return new SeriesValueStorage(new FilePath(storageFile));
+    }
+
+    public void updateSeriesValues(AbstractBuild build, int maxNumberOfBuilds) throws IOException
+    {
+	SeriesValueStorage storage = getStorage(build.getProject());
+
+	List<SeriesValue> values = storage.read(maxNumberOfBuilds);
+
+	values.addAll(loadSeries(build));
+
+	storage.write(values);
+    }
+
+    public List<SeriesValue> loadSeriesValues(AbstractProject project) throws IOException
+    {
+        return getStorage(project).read();
+    }
+
+    public JSONArray getSeriesJson(AbstractProject project, JSONArray series) throws IOException
+    {
+	GraphTable graphTable = new GraphTable(getStorage(project).read());
+
+	List<String> headers = graphTable.getHeaders();
+
+	for (int columnIndex = 0; columnIndex < headers.size(); columnIndex++)
+        {
+            JSONObject seriesJson = new JSONObject();
+
+            JSONArray valuesJson = new JSONArray();
+
+            String header = headers.get(columnIndex);
+
+            seriesJson.put("label", header);
+
+            seriesJson.put("style", getStyle());
+
+            for (List<String> row : graphTable.getRows())
+            {
+                String columnValue = row.get(columnIndex);
+
+                valuesJson.add(isEmpty(columnValue) ? null : Double.parseDouble(columnValue));
+            }
+
+            seriesJson.put("values", valuesJson);
+
+            series.add(seriesJson);
+        }
+
+	return series;
+    }
+
     /**
      * Retrieves the plot data for one series after a build from the workspace.
      *
@@ -51,5 +136,5 @@ public abstract class Series
      * @param build Hudson build the data should be taken from
      * @return a list of points that should be displayed on plot
      */
-    public abstract List<SeriesValue> loadSeries(AbstractBuild build) throws IOException;
+    protected abstract List<SeriesValue> loadSeries(AbstractBuild build) throws IOException;
 }

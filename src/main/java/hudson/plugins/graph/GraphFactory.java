@@ -23,6 +23,8 @@
  */
 package hudson.plugins.graph;
 
+import hudson.plugins.graph.series.Series;
+
 import java.util.List;
 import java.util.ArrayList;
 import net.sf.json.*;
@@ -37,7 +39,10 @@ public class GraphFactory
     {
         Graph graph = req.bindJSON(Graph.class, graphJson);
 
-        graph.setSeries(newSeries(makeJsonArray(graphJson.get("series")), req));
+        for (Series series: newSeries(makeJsonArray(graphJson.get("series")), req))
+        {
+            graph.addSeries(series);
+        }
 
         return graph;
     }

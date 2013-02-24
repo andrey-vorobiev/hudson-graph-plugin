@@ -39,7 +39,7 @@ public class XMLSeriesTest extends SeriesTest
     @Test
     public void shouldNotLoadAnySeriesIfFileNotExists() throws IOException
     {
-        Series series = new XMLSeries("noop", null, null, null);
+        Series series = new XMLSeries(sampleId, "noop", sampleStyle, null, null, null);
 
         assertEquals("Unexpected number of points", 0, series.loadSeries(mockBuild()).size());
     }
@@ -49,7 +49,7 @@ public class XMLSeriesTest extends SeriesTest
     {
         String xpath = "/level1/level2/elem/text()";
 
-        Series series = new XMLSeries(sampleFile, xpath, "STRING", samleLabel);
+        Series series = new XMLSeries(sampleId, sampleFile, sampleStyle, xpath, "STRING", samleLabel);
 
         List<SeriesValue> points = series.loadSeries(mockBuild());
 

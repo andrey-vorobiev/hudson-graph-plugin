@@ -114,6 +114,7 @@ public class SeriesValueStorage
         {
             if (writer != null)
             {
+                writer.flush();
                 writer.close();
             }
         }

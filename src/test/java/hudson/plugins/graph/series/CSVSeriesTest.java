@@ -34,11 +34,11 @@ import static hudson.plugins.graph.series.CSVSeries.FilteringMode.*;
 public class CSVSeriesTest extends SeriesTest
 {
     protected String sampleFile = "sample.csv";
-
+    
     @Test
     public void shouldNotLoadAnySeriesIfFileNotExists() throws IOException
     {
-        Series series = new CSVSeries("noop", OFF.name(), null);
+        Series series = new CSVSeries(sampleId, "noop", sampleStyle, OFF.name(), null);
 
         assertEquals("Unexpected number of points", 0, series.loadSeries(mockBuild()).size());
     }
@@ -46,7 +46,7 @@ public class CSVSeriesTest extends SeriesTest
     @Test
     public void shouldLoadSeriesFromCsvFile() throws IOException
     {
-        Series series = new CSVSeries(sampleFile, OFF.name(), null);
+        Series series = new CSVSeries(sampleId, sampleFile, sampleStyle, OFF.name(), null);
 
         List<SeriesValue> points = series.loadSeries(mockBuild());
 
@@ -58,7 +58,7 @@ public class CSVSeriesTest extends SeriesTest
     {
         String columnNamesToExclude = "a,c";
 
-        Series series = new CSVSeries(sampleFile, EXCLUDE_BY_COLUMN.name(), columnNamesToExclude);
+        Series series = new CSVSeries(sampleId, sampleFile, sampleStyle, EXCLUDE_BY_COLUMN.name(), columnNamesToExclude);
 
         List<SeriesValue> points = series.loadSeries(mockBuild());
 
@@ -75,7 +75,7 @@ public class CSVSeriesTest extends SeriesTest
     {
         String columnIndexesToExclude = "1,0,3";
 
-        Series series = new CSVSeries(sampleFile, EXCLUDE_BY_INDEX.name(), columnIndexesToExclude);
+        Series series = new CSVSeries(sampleId, sampleFile, sampleStyle, EXCLUDE_BY_INDEX.name(), columnIndexesToExclude);
 
         List<SeriesValue> points = series.loadSeries(mockBuild());
 
@@ -94,7 +94,7 @@ public class CSVSeriesTest extends SeriesTest
     {
         String columnNamesToInclude = "a,c";
 
-        Series series = new CSVSeries(sampleFile, INCLUDE_BY_COLUMN.name(), columnNamesToInclude);
+        Series series = new CSVSeries(sampleId, sampleFile, sampleStyle, INCLUDE_BY_COLUMN.name(), columnNamesToInclude);
 
         List<SeriesValue> points = series.loadSeries(mockBuild());
 
@@ -111,7 +111,7 @@ public class CSVSeriesTest extends SeriesTest
     {
         String columnIndexesToInclude = "1,0,3";
 
-        Series series = new CSVSeries(sampleFile, INCLUDE_BY_INDEX.name(), columnIndexesToInclude);
+        Series series = new CSVSeries(sampleId, sampleFile, sampleStyle, INCLUDE_BY_INDEX.name(), columnIndexesToInclude);
 
         List<SeriesValue> points = series.loadSeries(mockBuild());
 

@@ -39,7 +39,7 @@ public class PropertiesSeriesTest extends SeriesTest
     @Test
     public void shouldNotLoadAnySeriesIfFileNotExists() throws IOException
     {
-        Series series = new PropertiesSeries("noop", samleLabel);
+        Series series = new PropertiesSeries(sampleId, "noop", sampleStyle, samleLabel);
 
         assertEquals("Unexpected number of points", 0, series.loadSeries(mockBuild()).size());
     }
@@ -47,7 +47,7 @@ public class PropertiesSeriesTest extends SeriesTest
     @Test
     public void shouldLoadSeriesFromPropertiesFile() throws IOException
     {
-        Series series = new PropertiesSeries(sampleFile, samleLabel);
+        Series series = new PropertiesSeries(sampleId, sampleFile, sampleStyle, samleLabel);
 
         List<SeriesValue> points = series.loadSeries(mockBuild());
 
@@ -62,7 +62,7 @@ public class PropertiesSeriesTest extends SeriesTest
     @Test
     public void labelShouldBeNullIfNotSpecifiedInSeriesConfiguration() throws IOException
     {
-        Series series = new PropertiesSeries(sampleFile, null);
+        Series series = new PropertiesSeries(sampleId, sampleFile, sampleStyle, null);
 
         SeriesValue point = series.loadSeries(mockBuild()).iterator().next();
 
