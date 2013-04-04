@@ -1,5 +1,6 @@
 package hudson.plugins.graph;
 
+import hudson.FilePath;
 import hudson.model.*;
 import hudson.plugins.graph.series.*;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -9,7 +10,7 @@ import net.sf.json.JSONObject;
 import java.io.IOException;
 import java.util.*;
 
-public class Graph implements Comparable<Graph>
+public class Graph extends Identifiable implements Comparable<Graph>
 {
     private String group;
 
@@ -24,8 +25,9 @@ public class Graph implements Comparable<Graph>
     private List<Series> series = new ArrayList<Series>();
 
     @DataBoundConstructor
-    public Graph(String group, String name, String yLabel, Boolean logScaling, Integer numberOfBuildsToUse)
+    public Graph(String id, String group, String name, String yLabel, Boolean logScaling, Integer numberOfBuildsToUse)
     {
+        super(id);
         this.name = name;
         this.group = group;
         this.yLabel = yLabel;
@@ -70,17 +72,17 @@ public class Graph implements Comparable<Graph>
 
     public void handleBuild(AbstractBuild build, BuildListener listener)
     {
-	for (Series currentSeries : series)
-	{
-	    try
+	    for (Series currentSeries : series)
 	    {
-		currentSeries.updateSeriesValues(build, getNumberOfBuildsToUse());
+	        try
+	        {
+		        currentSeries.updateSeriesValues(build, getNumberOfBuildsToUse());
+	        }
+	        catch (IOException e)
+	        {
+		        listener.getLogger().println("Series load failed: " + currentSeries + ", " + e.getLocalizedMessage());
+	        }
 	    }
-	    catch (IOException e)
-	    {
-		listener.getLogger().println("Series load failed: " + currentSeries + ", " + e.getLocalizedMessage());
-	    }
-	}
     }
 
     public List<SeriesValue> getSeriesValues(AbstractProject project) throws IOException

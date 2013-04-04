@@ -7,6 +7,7 @@ package hudson.plugins.graph.series;
 import java.io.*;
 import java.util.List;
 
+import hudson.plugins.graph.Identifiable;
 import net.sf.json.*;
 
 import hudson.FilePath;
@@ -14,7 +15,6 @@ import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.plugins.graph.GraphTable;
 
-import static java.util.UUID.randomUUID;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 /**
@@ -23,24 +23,17 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
  * @author Nigel Daley
  * @author Allen Reese
  */
-public abstract class Series
+public abstract class Series extends Identifiable
 {
-    protected String id;
-
     protected String file;
 
     protected String style;
 
     protected Series(String id, String file, String style)
     {
-	this.id = isEmpty(id) ? randomUUID().toString() : id;
+	    super(id);
         this.file = file;
         this.style = style;
-    }
-
-    public String getId()
-    {
-	return id;
     }
 
     public String getFile()
@@ -50,7 +43,7 @@ public abstract class Series
 
     public String getStyle()
     {
-	return style;
+	    return style;
     }
 
     protected String nvl(String... values)
@@ -68,27 +61,35 @@ public abstract class Series
 
     public abstract String getType();
 
-    protected String getStorageName()
+    public String getStorageName()
     {
-	return id + ".csv";
+	    return getId() + ".csv";
+    }
+
+    public File getStorageFile(AbstractProject project)
+    {
+        return new File(project.getConfigFile().getFile().getParentFile(), getStorageName());
+    }
+
+    public FilePath getStorageFilePath(AbstractProject project)
+    {
+        return new FilePath(getStorageFile(project));
     }
 
     protected SeriesValueStorage getStorage(AbstractProject project)
     {
-	File storageFile = new File(project.getConfigFile().getFile().getParentFile(), getStorageName());
-
-	return new SeriesValueStorage(new FilePath(storageFile));
+	    return new SeriesValueStorage(getStorageFilePath(project));
     }
 
-    public void updateSeriesValues(AbstractBuild build, int maxNumberOfBuilds) throws IOException
+    public void updateSeriesValues(AbstractBuild build, Integer maxNumberOfBuilds) throws IOException
     {
-	SeriesValueStorage storage = getStorage(build.getProject());
+	    SeriesValueStorage storage = getStorage(build.getProject());
 
-	List<SeriesValue> values = storage.read(maxNumberOfBuilds);
+	    List<SeriesValue> values = storage.read(maxNumberOfBuilds);
 
-	values.addAll(loadSeries(build));
+	    values.addAll(loadSeries(build));
 
-	storage.write(values);
+	    storage.write(values);
     }
 
     public List<SeriesValue> loadSeriesValues(AbstractProject project) throws IOException
@@ -98,11 +99,11 @@ public abstract class Series
 
     public JSONArray getSeriesJson(AbstractProject project, JSONArray series) throws IOException
     {
-	GraphTable graphTable = new GraphTable(getStorage(project).read());
+	    GraphTable graphTable = new GraphTable(getStorage(project).read());
 
-	List<String> headers = graphTable.getHeaders();
+	    List<String> headers = graphTable.getHeaders();
 
-	for (int columnIndex = 0; columnIndex < headers.size(); columnIndex++)
+	    for (int columnIndex = 0; columnIndex < headers.size(); columnIndex++)
         {
             JSONObject seriesJson = new JSONObject();
 
@@ -125,8 +126,7 @@ public abstract class Series
 
             series.add(seriesJson);
         }
-
-	return series;
+	    return series;
     }
 
     /**

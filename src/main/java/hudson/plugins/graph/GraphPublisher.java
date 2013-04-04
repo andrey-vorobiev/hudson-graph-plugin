@@ -8,6 +8,7 @@ import hudson.*;
 import hudson.model.*;
 import hudson.tasks.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -21,7 +22,7 @@ public class GraphPublisher extends Recorder
     @Extension
     public static final GraphBuildStepDescriptor descriptor = new GraphBuildStepDescriptor();
 
-    private ArrayList<Graph> graphs = new ArrayList<Graph>();
+    private List<Graph> graphs = new ArrayList<Graph>();
 
     public List<Graph> getGraphs()
     {
@@ -55,9 +56,9 @@ public class GraphPublisher extends Recorder
         return groups;
     }
 
-    public void addGraph(Graph graph)
+    public void setGraphs(List<Graph> graphs)
     {
-        graphs.add(graph);
+        this.graphs = graphs;
     }
 
     @Override

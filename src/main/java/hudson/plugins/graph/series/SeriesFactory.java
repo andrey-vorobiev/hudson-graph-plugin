@@ -34,11 +34,11 @@ public class SeriesFactory
     /**
      * Creates series from JSON data using StaplerRequest
      *
-     * @param seriesTypeJson series in JSON representation
+     * @param seriesJson series in JSON representation
      * @param req stapler request
      * @return series
      */
-    public static Series newSeries(JSONObject seriesJson, StaplerRequest req)
+    public static Series parseSeries(JSONObject seriesJson, StaplerRequest req)
     {
         JSONObject seriesTypeJson = seriesJson.getJSONObject("seriesType");
 
@@ -66,13 +66,13 @@ public class SeriesFactory
      * @param req stapler request
      * @return series list
      */
-    public static List<Series> newSeries(JSONArray array, StaplerRequest req)
+    public static List<Series> parseSeries(JSONArray array, StaplerRequest req)
     {
         List<Series> series = new ArrayList<Series>();
 
         for (Object seriesJson : array)
         {
-            series.add(newSeries((JSONObject) seriesJson, req));
+            series.add(parseSeries((JSONObject) seriesJson, req));
         }
 
         return series;

@@ -11,6 +11,8 @@
                 <f:repeatableDeleteButton value="${%Delete Graph}"/>
             </div>
             <table width="100%">
+                <input name="id" type="hidden" value="${graph.id}"/>
+
                 <f:entry title="${%Graph group}" help="/plugin/graph/help/group.html">
                     <f:textbox name="group" value="${graph.group}" clazz="required"/>
                 </f:entry>

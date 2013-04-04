@@ -30,17 +30,20 @@ import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
 
 import java.io.IOException;
+import java.util.List;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
 import org.kohsuke.stapler.*;
 
-import static hudson.plugins.graph.GraphFactory.newGraphs;
+import static hudson.plugins.graph.GraphFactory.parseGraphs;
 
 
 public class GraphBuildStepDescriptor extends BuildStepDescriptor<Publisher>
 {
+    private GraphPublisher publisher = new GraphPublisher();
+
     public GraphBuildStepDescriptor()
     {
         super(GraphPublisher.class);
@@ -60,18 +63,13 @@ public class GraphBuildStepDescriptor extends BuildStepDescriptor<Publisher>
     @Override
     public Publisher newInstance(StaplerRequest req, JSONObject publisherJson) throws Descriptor.FormException
     {
-        GraphPublisher publisher = new GraphPublisher();
-
-        for (Graph graph : newGraphs((JSON) publisherJson.get("graphs"), req))
-        {
-            publisher.addGraph(graph);
-        }
+        publisher.setGraphs(parseGraphs((JSON) publisherJson.get("graphs"), req));
 
         return publisher;
     }
 
-    public FormValidation doCheckSeriesFile(@AncestorInPath AbstractProject project, @QueryParameter String value) throws IOException
+    public FormValidation doCheckSeriesFile(@AncestorInPath AbstractProject project, @QueryParameter String filename) throws IOException
     {
-        return FilePath.validateFileMask(project.getSomeWorkspace(), value);
+        return FilePath.validateFileMask(project.getSomeWorkspace(), filename);
     }
 }
