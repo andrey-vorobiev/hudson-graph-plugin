@@ -1,6 +1,5 @@
 package hudson.plugins.graph;
 
-import hudson.FilePath;
 import hudson.model.*;
 import hudson.plugins.graph.series.*;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -85,13 +84,13 @@ public class Graph extends Identifiable implements Comparable<Graph>
 	    }
     }
 
-    public List<SeriesValue> getSeriesValues(AbstractProject project) throws IOException
+    public List<SeriesValue> getSeriesValues(Job job) throws IOException
     {
         List<SeriesValue> seriesValues = new ArrayList<SeriesValue>();
 
         for (Series currentSeries : series)
         {
-            seriesValues.addAll(currentSeries.loadSeriesValues(project));
+            seriesValues.addAll(currentSeries.loadSeriesValues(job));
         }
 
         return seriesValues;
@@ -121,21 +120,21 @@ public class Graph extends Identifiable implements Comparable<Graph>
         return array;
     }
 
-    public JSONArray getSeriesJson(AbstractProject project) throws IOException
+    public JSONArray getSeriesJson(Job job) throws IOException
     {
         JSONArray array = new JSONArray();
 
         for (Series currentSeries : series)
         {
-            currentSeries.getSeriesJson(project, array);
+            currentSeries.getSeriesJson(job, array);
         }
 
         return array;
     }
 
-    public JSONObject toJson(AbstractProject project) throws IOException
+    public JSONObject toJson(Job job) throws IOException
     {
-        List<SeriesValue> values = getSeriesValues(project);
+        List<SeriesValue> values = getSeriesValues(job);
 
         JSONObject graphJson = new JSONObject();
 
@@ -143,7 +142,7 @@ public class Graph extends Identifiable implements Comparable<Graph>
         graphJson.put("yLabel", getYLabel());
         graphJson.put("xLabels", getXLabelsJson(values));
         graphJson.put("logscaling", getLogScaling());
-        graphJson.put("series", getSeriesJson(project));
+        graphJson.put("series", getSeriesJson(job));
 
         return graphJson;
     }

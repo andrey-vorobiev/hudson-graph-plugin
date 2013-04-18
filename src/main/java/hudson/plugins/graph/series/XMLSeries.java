@@ -40,14 +40,6 @@ public class XMLSeries extends Series
 
     private String nodeType;
 
-    /**
-     *
-     * @param file xml file to take data from
-     * @param xpath xpath expression to obtain series point
-     * @param nodeType
-     * @param url
-     * @param label
-     */
     @DataBoundConstructor
     public XMLSeries(String id, String file, String style, String xpath, String nodeType, String label)
     {

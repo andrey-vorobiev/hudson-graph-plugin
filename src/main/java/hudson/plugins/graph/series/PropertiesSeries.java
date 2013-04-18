@@ -22,11 +22,6 @@ public class PropertiesSeries extends Series
 {
     private String label;
 
-    /**
-     *
-     * @param file properties file to take data from
-     * @param label
-     */
     @DataBoundConstructor
     public PropertiesSeries(String id, String file, String style, String label)
     {

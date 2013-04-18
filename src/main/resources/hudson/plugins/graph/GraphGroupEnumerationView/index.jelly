@@ -5,15 +5,15 @@
  */
  -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <l:layout title="${it.project.displayName} plots">
-    <st:include it="${it.project}" page="sidepanel.jelly" />
+  <l:layout title="${it.job.displayName} plots">
+    <st:include it="${it.job}" page="sidepanel.jelly" />
     <l:main-panel>
       <h1>${%Plot Groups}</h1>
 
       <j:choose>
         <j:when test="${it.hasGraphs()}">
           <p>
-            ${%This project contains groups of plots.}
+            ${%This job contains groups of plots.}
           </p>
           <table>
             <j:forEach var="group" items="${it.groups}">
@@ -25,7 +25,7 @@
         </j:when>
         <j:otherwise>
           <p>
-            ${%This project has no plots yet.}
+            ${%This job has no plots yet.}
           </p>
         </j:otherwise>
       </j:choose>

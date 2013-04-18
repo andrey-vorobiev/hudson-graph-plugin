@@ -4,11 +4,10 @@
  */
 package hudson.plugins.graph;
 
-import hudson.model.AbstractProject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
+import hudson.model.Job;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 
@@ -26,17 +25,22 @@ import net.sf.json.JSONObject;
 @SuppressWarnings("unused")
 public class GraphGroupView
 {
-    private AbstractProject project;
-
     private List<Graph> graphs;
+
+    private Job job;
 
     private String group;
 
-    public GraphGroupView(AbstractProject project, String group, SortedSet<Graph> graphs)
+    public GraphGroupView(Job job, String group, SortedSet<Graph> graphs)
     {
-        this.graphs = new ArrayList<Graph>(graphs);
+        this.job = job;
         this.group = group;
-        this.project = project;
+        this.graphs = new ArrayList<Graph>(graphs);
+    }
+
+    public Job getJob()
+    {
+        return job;
     }
 
     public String getGroup()
@@ -49,18 +53,13 @@ public class GraphGroupView
         return graphs;
     }
 
-    public AbstractProject getProject()
-    {
-        return project;
-    }
-
-    private JSONArray getGraphsJson() throws IOException
+    private JSONArray getGraphsJson(StaplerRequest req) throws IOException
     {
         JSONArray graphsJson = new JSONArray();
 
         for (Graph graph : graphs)
         {
-            graphsJson.add(graph.toJson(project));
+            graphsJson.add(graph.toJson(req.findAncestorObject(Job.class)));
         }
 
         return graphsJson;
@@ -72,7 +71,7 @@ public class GraphGroupView
 
         groupJson.put("name", group);
 
-        groupJson.put("graphs", getGraphsJson());
+        groupJson.put("graphs", getGraphsJson(req));
 
         res.setContentType("application/json");
 

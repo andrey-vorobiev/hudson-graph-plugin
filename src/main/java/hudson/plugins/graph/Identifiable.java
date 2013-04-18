@@ -3,7 +3,7 @@ package hudson.plugins.graph;
 import static java.util.UUID.randomUUID;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-public class Identifiable
+public abstract class Identifiable
 {
     private String id;
 

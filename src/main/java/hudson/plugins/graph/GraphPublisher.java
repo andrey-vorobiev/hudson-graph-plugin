@@ -6,6 +6,7 @@ package hudson.plugins.graph;
 
 import hudson.*;
 import hudson.model.*;
+import hudson.plugins.graph.series.Series;
 import hudson.tasks.*;
 
 import java.io.File;
@@ -56,15 +57,45 @@ public class GraphPublisher extends Recorder
         return groups;
     }
 
-    public void setGraphs(List<Graph> graphs)
+    void setGraphs(List<Graph> graphs)
     {
         this.graphs = graphs;
     }
 
-    @Override
-    public Action getProjectAction(AbstractProject<?, ?> project)
+    public List<Series> getSeries()
     {
-        return new GraphGroupEnumerationView(project, this);
+        List<Series> series = new ArrayList<Series>();
+
+        for (Graph graph : graphs)
+        {
+            series.addAll(graph.getSeries());
+        }
+
+        return series;
+    }
+
+    void deleteLegacySeries(GraphPublisher oldPublisher, Job job)
+    {
+        if (oldPublisher == null)
+        {
+            return;
+        }
+
+        List<Series> newSeries = getSeries();
+
+        for (Series series : oldPublisher.getSeries())
+        {
+            if (!newSeries.contains(series))
+            {
+                series.delete(job);
+            }
+        }
+    }
+
+    @Override
+    public Action getProjectAction(AbstractProject<?, ?> job)
+    {
+        return new GraphGroupEnumerationView(job, this);
     }
 
     public BuildStepMonitor getRequiredMonitorService()
@@ -81,7 +112,7 @@ public class GraphPublisher extends Recorder
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) throws IOException, InterruptedException
     {
-        listener.getLogger().println("Parsing series files");
+        listener.getLogger().println("Parsing series files...");
 
         for (Graph graph : getGraphs())
         {

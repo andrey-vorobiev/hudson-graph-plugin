@@ -25,7 +25,7 @@ package hudson.plugins.graph.helper;
 
 import net.sf.json.JSONArray;
 
-public class JsonHelper
+public class JSonHelper
 {
     public static JSONArray makeJsonArray(Object json)
     {

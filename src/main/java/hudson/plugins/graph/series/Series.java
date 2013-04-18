@@ -7,12 +7,12 @@ package hudson.plugins.graph.series;
 import java.io.*;
 import java.util.List;
 
+import hudson.model.Job;
 import hudson.plugins.graph.Identifiable;
 import net.sf.json.*;
 
 import hudson.FilePath;
 import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
 import hudson.plugins.graph.GraphTable;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -31,7 +31,7 @@ public abstract class Series extends Identifiable
 
     protected Series(String id, String file, String style)
     {
-	    super(id);
+        super(id);
         this.file = file;
         this.style = style;
     }
@@ -43,7 +43,7 @@ public abstract class Series extends Identifiable
 
     public String getStyle()
     {
-	    return style;
+        return style;
     }
 
     protected String nvl(String... values)
@@ -61,49 +61,54 @@ public abstract class Series extends Identifiable
 
     public abstract String getType();
 
-    public String getStorageName()
+    public String getStorageFileName()
     {
-	    return getId() + ".csv";
+        return getId() + ".csv";
     }
 
-    public File getStorageFile(AbstractProject project)
+    public File getStorageFile(Job job)
     {
-        return new File(project.getConfigFile().getFile().getParentFile(), getStorageName());
+        return new File(job.getConfigFile().getFile().getParentFile(), getStorageFileName());
     }
 
-    public FilePath getStorageFilePath(AbstractProject project)
+    public FilePath getStorageFilePath(Job job)
     {
-        return new FilePath(getStorageFile(project));
+        return new FilePath(getStorageFile(job));
     }
 
-    protected SeriesValueStorage getStorage(AbstractProject project)
+    protected SeriesValueStorage getStorage(Job job)
     {
-	    return new SeriesValueStorage(getStorageFilePath(project));
+        return new SeriesValueStorage(getStorageFilePath(job));
     }
 
     public void updateSeriesValues(AbstractBuild build, Integer maxNumberOfBuilds) throws IOException
     {
-	    SeriesValueStorage storage = getStorage(build.getProject());
+        SeriesValueStorage storage = getStorage(build.getProject());
 
-	    List<SeriesValue> values = storage.read(maxNumberOfBuilds);
+        List<SeriesValue> values = storage.read(maxNumberOfBuilds);
 
-	    values.addAll(loadSeries(build));
+        values.addAll(loadSeries(build));
 
-	    storage.write(values);
+        storage.write(values);
     }
 
-    public List<SeriesValue> loadSeriesValues(AbstractProject project) throws IOException
+    public List<SeriesValue> loadSeriesValues(Job job) throws IOException
     {
-        return getStorage(project).read();
+        return getStorage(job).read();
     }
 
-    public JSONArray getSeriesJson(AbstractProject project, JSONArray series) throws IOException
+    public void delete(Job job)
     {
-	    GraphTable graphTable = new GraphTable(getStorage(project).read());
+        getStorageFile(job).delete();
+    }
 
-	    List<String> headers = graphTable.getHeaders();
+    public JSONArray getSeriesJson(Job job, JSONArray series) throws IOException
+    {
+        GraphTable graphTable = new GraphTable(getStorage(job).read());
 
-	    for (int columnIndex = 0; columnIndex < headers.size(); columnIndex++)
+        List<String> headers = graphTable.getHeaders();
+
+        for (int columnIndex = 0; columnIndex < headers.size(); columnIndex++)
         {
             JSONObject seriesJson = new JSONObject();
 
@@ -126,7 +131,7 @@ public abstract class Series extends Identifiable
 
             series.add(seriesJson);
         }
-	    return series;
+        return series;
     }
 
     /**

@@ -30,16 +30,6 @@ public class GraphTable
         return rows;
     }
 
-    public List<List<String>> join()
-    {
-        List<List<String>> join = new ArrayList<List<String>>();
-
-        join.add(headers);
-        join.addAll(rows);
-
-        return join;
-    }
-
     protected SortedMap<Integer, List<SeriesValue>> groupSeriesValuesByBuildNumber(List<SeriesValue> seriesValues)
     {
         SortedMap<Integer, List<SeriesValue>> groupedValues = new TreeMap<Integer, List<SeriesValue>>();

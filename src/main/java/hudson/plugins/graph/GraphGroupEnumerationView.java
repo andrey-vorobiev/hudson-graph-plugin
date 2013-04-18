@@ -4,14 +4,13 @@
  */
 package hudson.plugins.graph;
 
-import hudson.model.AbstractProject;
 import hudson.model.Action;
-import hudson.model.Project;
 
 import java.io.IOException;
 import java.util.Set;
 import java.util.SortedSet;
 
+import hudson.model.Job;
 import org.kohsuke.stapler.*;
 
 import static java.net.URLDecoder.decode;
@@ -26,19 +25,19 @@ import static java.net.URLEncoder.encode;
 @SuppressWarnings("unused")
 public class GraphGroupEnumerationView implements Action, StaplerProxy
 {
-    private AbstractProject project;
-
     private GraphPublisher publisher;
 
-    public GraphGroupEnumerationView(AbstractProject project, GraphPublisher publisher)
+    private Job job;
+
+    public GraphGroupEnumerationView(Job job, GraphPublisher publisher)
     {
-        this.project = project;
+        this.job = job;
         this.publisher = publisher;
     }
 
-    public AbstractProject getProject()
+    public Job getJob()
     {
-        return project;
+        return job;
     }
 
     public String getDisplayName()
@@ -75,10 +74,9 @@ public class GraphGroupEnumerationView implements Action, StaplerProxy
     {
         String originalGroup = decode(urlEncodedGroup, "UTF-8");
 
-        return new GraphGroupView(project, originalGroup, publisher.getGraphs(originalGroup));
+        return new GraphGroupView(job, originalGroup, publisher.getGraphs(originalGroup));
     }
 
-    // If there's only one graph group, simply display that group contents instead this view.
     public Object getTarget()
     {
         SortedSet<String> groups = publisher.getGroups();
@@ -87,7 +85,7 @@ public class GraphGroupEnumerationView implements Action, StaplerProxy
         {
             String singleGroup = groups.first();
 
-            return new GraphGroupView(project, singleGroup, publisher.getGraphs(singleGroup));
+            return new GraphGroupView(job, singleGroup, publisher.getGraphs(singleGroup));
         }
         else
         {

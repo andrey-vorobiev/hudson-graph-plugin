@@ -31,7 +31,7 @@ import net.sf.json.*;
 import org.kohsuke.stapler.StaplerRequest;
 
 import static hudson.plugins.graph.series.SeriesFactory.parseSeries;
-import static hudson.plugins.graph.helper.JsonHelper.makeJsonArray;
+import static hudson.plugins.graph.helper.JSonHelper.makeJsonArray;
 
 public class GraphFactory
 {

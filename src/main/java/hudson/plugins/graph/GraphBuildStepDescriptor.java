@@ -30,7 +30,6 @@ import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
 
 import java.io.IOException;
-import java.util.List;
 
 import net.sf.json.JSON;
 import net.sf.json.JSONObject;
@@ -42,8 +41,6 @@ import static hudson.plugins.graph.GraphFactory.parseGraphs;
 
 public class GraphBuildStepDescriptor extends BuildStepDescriptor<Publisher>
 {
-    private GraphPublisher publisher = new GraphPublisher();
-
     public GraphBuildStepDescriptor()
     {
         super(GraphPublisher.class);
@@ -52,6 +49,11 @@ public class GraphBuildStepDescriptor extends BuildStepDescriptor<Publisher>
     public String getDisplayName()
     {
         return Messages.Plot_Publisher_DisplayName();
+    }
+
+    private GraphPublisher getOldGraphPublisher(Job job)
+    {
+        return (GraphPublisher) job.getProperty(GraphPublisher.class.getName().replace(".", "-")).getOriginalValue();
     }
 
     @Override
@@ -63,11 +65,18 @@ public class GraphBuildStepDescriptor extends BuildStepDescriptor<Publisher>
     @Override
     public Publisher newInstance(StaplerRequest req, JSONObject publisherJson) throws Descriptor.FormException
     {
-        publisher.setGraphs(parseGraphs((JSON) publisherJson.get("graphs"), req));
+        Job job = req.findAncestorObject(Job.class);
 
-        return publisher;
+        GraphPublisher newPublisher = new GraphPublisher(), oldPublisher = getOldGraphPublisher(job);
+
+        newPublisher.setGraphs(parseGraphs((JSON) publisherJson.get("graphs"), req));
+
+        newPublisher.deleteLegacySeries(oldPublisher, job);
+
+        return newPublisher;
     }
 
+    @SuppressWarnings("unused")
     public FormValidation doCheckSeriesFile(@AncestorInPath AbstractProject project, @QueryParameter String filename) throws IOException
     {
         return FilePath.validateFileMask(project.getSomeWorkspace(), filename);

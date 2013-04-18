@@ -40,15 +40,6 @@ public class CSVSeries extends Series
 
     private String columns;
 
-    /**
-     *
-     * @param file csv file to take data from
-     * @param mode flag that describes how specified columns should be
-     * considered, i.e is it column indexes or named or should be columns included
-     * or excluded.
-     * @param columns comma separated list of columns or indexes to exclude or
-     * include.
-     */
     @DataBoundConstructor
     public CSVSeries(String id, String file, String style, String mode, String columns)
     {
