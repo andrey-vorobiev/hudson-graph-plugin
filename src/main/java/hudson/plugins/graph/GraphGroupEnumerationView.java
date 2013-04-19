@@ -12,6 +12,7 @@ import java.util.SortedSet;
 
 import hudson.model.Job;
 import org.kohsuke.stapler.*;
+import org.kohsuke.stapler.export.Exported;
 
 import static java.net.URLDecoder.decode;
 import static java.net.URLEncoder.encode;
@@ -22,7 +23,6 @@ import static java.net.URLEncoder.encode;
  *
  * @author Nigel Daley
  */
-@SuppressWarnings("unused")
 public class GraphGroupEnumerationView implements Action, StaplerProxy
 {
     private GraphPublisher publisher;
@@ -35,6 +35,8 @@ public class GraphGroupEnumerationView implements Action, StaplerProxy
         this.publisher = publisher;
     }
 
+    @Exported
+    @SuppressWarnings("unused")
     public Job getJob()
     {
         return job;
@@ -60,16 +62,22 @@ public class GraphGroupEnumerationView implements Action, StaplerProxy
         return !publisher.getGraphs().isEmpty();
     }
 
+    @Exported
+    @SuppressWarnings("unused")
     public Set<String> getGroups()
     {
         return publisher.getGroups();
     }
 
+    @Exported
+    @SuppressWarnings("unused")
     public String encodeGroup(String group) throws IOException
     {
         return encode(group, "UTF-8");
     }
 
+    @Exported
+    @SuppressWarnings("unused")
     public GraphGroupView getDynamic(String urlEncodedGroup, StaplerRequest req, StaplerResponse rsp) throws IOException
     {
         String originalGroup = decode(urlEncodedGroup, "UTF-8");

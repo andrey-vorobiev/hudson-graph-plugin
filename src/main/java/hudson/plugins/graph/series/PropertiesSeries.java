@@ -12,6 +12,7 @@ import hudson.model.AbstractBuild;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import static org.apache.commons.lang.StringUtils.defaultIfEmpty;
 import static org.apache.commons.lang.StringUtils.isEmpty;
 
 /**
@@ -66,7 +67,7 @@ public class PropertiesSeries extends Series
 
                 String value = properties.getProperty("YVALUE");
 
-                String valueLabel = nvl(properties.getProperty("LABEL"), label);
+                String valueLabel = defaultIfEmpty(properties.getProperty("LABEL"), label);
 
                 if (!isEmpty(value))
                 {

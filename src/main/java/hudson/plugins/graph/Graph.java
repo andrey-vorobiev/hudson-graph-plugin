@@ -5,6 +5,7 @@ import hudson.plugins.graph.series.*;
 import org.kohsuke.stapler.DataBoundConstructor;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.kohsuke.stapler.export.Exported;
 
 import java.io.IOException;
 import java.util.*;
@@ -34,24 +35,39 @@ public class Graph extends Identifiable implements Comparable<Graph>
         this.numberOfBuildsToUse = numberOfBuildsToUse;
     }
 
+    @Exported
+    @SuppressWarnings("unused")
     public String getGroup()
     {
         return group;
     }
 
+    @Exported
+    @SuppressWarnings("unused")
     public String getName()
     {
         return name;
     }
 
+    @Exported
+    @SuppressWarnings("unused")
     public String getYLabel()
     {
         return yLabel;
     }
 
+    @Exported
+    @SuppressWarnings("unused")
     public Boolean getLogScaling()
     {
         return logScaling;
+    }
+
+    @Exported
+    @SuppressWarnings("unused")
+    public Integer getNumberOfBuildsToUse()
+    {
+        return numberOfBuildsToUse;
     }
 
     public List<Series> getSeries()
@@ -62,11 +78,6 @@ public class Graph extends Identifiable implements Comparable<Graph>
     public void addSeries(Series series)
     {
         getSeries().add(series);
-    }
-
-    public Integer getNumberOfBuildsToUse()
-    {
-        return numberOfBuildsToUse;
     }
 
     public void handleBuild(AbstractBuild build, BuildListener listener)

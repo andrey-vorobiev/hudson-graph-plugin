@@ -55,16 +55,19 @@ public class XMLSeries extends Series
         return SeriesType.XML.toString();
     }
 
+    @SuppressWarnings("unused")
     public String getXpath()
     {
         return xpath;
     }
 
+    @SuppressWarnings("unused")
     public String getLabel()
     {
         return label;
     }
 
+    @SuppressWarnings("unused")
     public String getNodeType()
     {
         return nodeType;

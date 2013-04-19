@@ -8,8 +8,8 @@ import hudson.*;
 import hudson.model.*;
 import hudson.plugins.graph.series.Series;
 import hudson.tasks.*;
+import org.kohsuke.stapler.export.Exported;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -25,6 +25,8 @@ public class GraphPublisher extends Recorder
 
     private List<Graph> graphs = new ArrayList<Graph>();
 
+    @Exported
+    @SuppressWarnings("unused")
     public List<Graph> getGraphs()
     {
         return graphs;

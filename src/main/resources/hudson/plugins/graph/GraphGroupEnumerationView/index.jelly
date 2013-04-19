@@ -5,30 +5,30 @@
  */
  -->
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <l:layout title="${it.job.displayName} plots">
-    <st:include it="${it.job}" page="sidepanel.jelly" />
-    <l:main-panel>
-      <h1>${%Plot Groups}</h1>
+    <l:layout title="${it.job.displayName} plots">
+        <st:include it="${it.job}" page="sidepanel.jelly"/>
+        <l:main-panel>
+            <h1>${%Plot Groups}</h1>
 
-      <j:choose>
-        <j:when test="${it.hasGraphs()}">
-          <p>
-            ${%This job contains groups of plots.}
-          </p>
-          <table>
-            <j:forEach var="group" items="${it.groups}">
-              <t:summary icon="graph.gif" href="${it.encodeGroup(group)}/">
-                ${group}
-              </t:summary>
-            </j:forEach>
-          </table>
-        </j:when>
-        <j:otherwise>
-          <p>
-            ${%This job has no plots yet.}
-          </p>
-        </j:otherwise>
-      </j:choose>
-    </l:main-panel>
-  </l:layout>
+            <j:choose>
+                <j:when test="${it.hasGraphs()}">
+                    <p>
+                        ${%This job contains groups of plots.}
+                    </p>
+                    <table>
+                        <j:forEach var="group" items="${it.groups}">
+                            <t:summary icon="graph.gif" href="${it.encodeGroup(group)}/">
+                                ${group}
+                            </t:summary>
+                        </j:forEach>
+                    </table>
+                </j:when>
+                <j:otherwise>
+                    <p>
+                        ${%This job has no plots yet.}
+                    </p>
+                </j:otherwise>
+            </j:choose>
+        </l:main-panel>
+    </l:layout>
 </j:jelly>

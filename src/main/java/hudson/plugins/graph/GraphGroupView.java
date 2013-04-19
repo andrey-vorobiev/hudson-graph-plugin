@@ -22,7 +22,6 @@ import net.sf.json.JSONObject;
  *
  * @author Nigel Daley
  */
-@SuppressWarnings("unused")
 public class GraphGroupView
 {
     private List<Graph> graphs;
@@ -38,6 +37,7 @@ public class GraphGroupView
         this.graphs = new ArrayList<Graph>(graphs);
     }
 
+    @SuppressWarnings("unused")
     public Job getJob()
     {
         return job;
@@ -48,6 +48,7 @@ public class GraphGroupView
         return group;
     }
 
+    @SuppressWarnings("unused")
     public List<Graph> getGraphs()
     {
         return graphs;
@@ -65,6 +66,7 @@ public class GraphGroupView
         return graphsJson;
     }
 
+    @SuppressWarnings("unused")
     public void doGetGroup(StaplerRequest req, StaplerResponse res) throws IOException
     {
         JSONObject groupJson = new JSONObject();

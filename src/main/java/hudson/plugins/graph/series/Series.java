@@ -46,19 +46,7 @@ public abstract class Series extends Identifiable
         return style;
     }
 
-    protected String nvl(String... values)
-    {
-        for (String value : values)
-        {
-            if (value != null)
-            {
-                return value;
-            }
-        }
-
-        return null;
-    }
-
+    @SuppressWarnings("unused")
     public abstract String getType();
 
     public String getStorageFileName()
