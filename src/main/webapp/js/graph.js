@@ -58,9 +58,9 @@ hgp.Graph.prototype.getSeriesValues = function(series)
     return values;
 };
 
-hgp.Graph.prototype.getSeriesType = function(series)
+hgp.Graph.prototype.getGraphType = function(graph)
 {
-    switch (series.style)
+    switch (graph.style)
     {
         case 'area':
             return {
@@ -84,12 +84,10 @@ hgp.Graph.prototype.getSeries = function()
 
     for (var seriesIndex = 0; seriesIndex < jsonSeries.length; seriesIndex++)
     {
-        var json = {
+        series.push({
             label: jsonSeries[seriesIndex].label,
             data: this.getSeriesValues(jsonSeries[seriesIndex])
-        };
-
-        series.push(Flotr._.extend(json, this.getSeriesType(jsonSeries[seriesIndex])));
+        });
     }
 
     return series;
@@ -109,7 +107,7 @@ hgp.Graph.prototype.getTicks = function()
 
 hgp.Graph.prototype.getOptions = function()
 {
-    return {
+    return Flotr._.extend({
         title: this.json.name,
         HtmlText: false,
         legend: {
@@ -131,7 +129,7 @@ hgp.Graph.prototype.getOptions = function()
         selection: {
             mode: 'xy'
         }
-    };
+    }, this.getGraphType(this.json));
 };
 
 hgp.Graph.prototype.drawGraph = function(container, options)

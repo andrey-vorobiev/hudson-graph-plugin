@@ -24,9 +24,9 @@ public class PropertiesSeries extends Series
     private String label;
 
     @DataBoundConstructor
-    public PropertiesSeries(String id, String file, String style, String label)
+    public PropertiesSeries(String id, String file, String label)
     {
-        super(id, file, style);
+        super(id, file);
 
         this.label = label;
     }

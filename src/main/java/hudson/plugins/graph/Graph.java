@@ -16,6 +16,8 @@ public class Graph extends Identifiable implements Comparable<Graph>
 
     private String name;
 
+    private String style;
+
     private String yLabel;
 
     private Boolean logScaling;
@@ -25,11 +27,12 @@ public class Graph extends Identifiable implements Comparable<Graph>
     private List<Series> series = new ArrayList<Series>();
 
     @DataBoundConstructor
-    public Graph(String id, String group, String name, String yLabel, Boolean logScaling, Integer numberOfBuildsToUse)
+    public Graph(String id, String group, String name, String style, String yLabel, Boolean logScaling, Integer numberOfBuildsToUse)
     {
         super(id);
         this.name = name;
         this.group = group;
+        this.style = style;
         this.yLabel = yLabel;
         this.logScaling = logScaling;
         this.numberOfBuildsToUse = numberOfBuildsToUse;
@@ -47,6 +50,11 @@ public class Graph extends Identifiable implements Comparable<Graph>
     public String getName()
     {
         return name;
+    }
+
+    public String getStyle()
+    {
+        return style;
     }
 
     @Exported
@@ -150,6 +158,7 @@ public class Graph extends Identifiable implements Comparable<Graph>
         JSONObject graphJson = new JSONObject();
 
         graphJson.put("name", getName());
+        graphJson.put("style", getStyle());
         graphJson.put("yLabel", getYLabel());
         graphJson.put("xLabels", getXLabelsJson(values));
         graphJson.put("logscaling", getLogScaling());

@@ -41,9 +41,9 @@ public class XMLSeries extends Series
     private String nodeType;
 
     @DataBoundConstructor
-    public XMLSeries(String id, String file, String style, String xpath, String nodeType, String label)
+    public XMLSeries(String id, String file, String xpath, String nodeType, String label)
     {
-        super(id, file, style);
+        super(id, file);
 
         this.xpath = xpath;
         this.label = label;

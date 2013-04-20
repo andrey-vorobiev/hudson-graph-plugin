@@ -27,23 +27,15 @@ public abstract class Series extends Identifiable
 {
     protected String file;
 
-    protected String style;
-
-    protected Series(String id, String file, String style)
+    protected Series(String id, String file)
     {
         super(id);
         this.file = file;
-        this.style = style;
     }
 
     public String getFile()
     {
         return file;
-    }
-
-    public String getStyle()
-    {
-        return style;
     }
 
     @SuppressWarnings("unused")
@@ -105,8 +97,6 @@ public abstract class Series extends Identifiable
             String header = headers.get(columnIndex);
 
             seriesJson.put("label", header);
-
-            seriesJson.put("style", getStyle());
 
             for (List<String> row : graphTable.getRows())
             {

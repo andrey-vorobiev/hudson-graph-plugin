@@ -41,9 +41,9 @@ public class CSVSeries extends Series
     private String columns;
 
     @DataBoundConstructor
-    public CSVSeries(String id, String file, String style, String mode, String columns)
+    public CSVSeries(String id, String file, String mode, String columns)
     {
-        super(id, file, style);
+        super(id, file);
 
         this.columns = columns;
         this.mode = FilteringMode.valueOf(mode);

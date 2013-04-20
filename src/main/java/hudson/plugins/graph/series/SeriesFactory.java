@@ -44,7 +44,6 @@ public class SeriesFactory
 
         seriesTypeJson.put("id", seriesJson.getString("id"));
         seriesTypeJson.put("file", seriesJson.getString("file"));
-        seriesTypeJson.put("style", seriesJson.getString("style"));
 
         switch (SeriesType.parse(seriesTypeJson.getString("value")))
         {
