@@ -29,6 +29,6 @@ public class JSonHelper
 {
     public static JSONArray makeJsonArray(Object json)
     {
-        return json instanceof JSONArray ? (JSONArray) json : JSONArray.fromObject(json);
+        return json instanceof JSONArray ? (JSONArray) json : json == null ? new JSONArray() :JSONArray.fromObject(json);
     }
 }
